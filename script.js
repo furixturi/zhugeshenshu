@@ -5,6 +5,11 @@ function getNext(arr){
 	return arr.pop() === 1;
 }
 
+/**
+ * Fisher-Yates Shuffle / Knuth Shuffle
+ * courtesy: http://www.htmlblog.us/random-javascript-array
+ *
+ */
 function shuffleArr(arr){
 	var shuffeled = arr ? arr.slice(0) : [], i = shuffeled.length, j, temp;
 	while(--i){
