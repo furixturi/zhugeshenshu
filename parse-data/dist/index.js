@@ -42,6 +42,7 @@ $('.al_txt p').each(function (i, elm) {
         }
     }
 });
-fs.writeFileSync('./data.js', 'const qians = ' +
+fs.writeFileSync(__dirname +
+    '/../../data.js', 'const qians = ' +
     JSON.stringify(qians, null, 2) + ';');
 //# sourceMappingURL=index.js.map

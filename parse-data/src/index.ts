@@ -44,5 +44,6 @@ $('.al_txt p').each((i, elm) => {
   }
   
 });
-fs.writeFileSync('./data.js', 'const qians = ' + 
+fs.writeFileSync(__dirname + 
+  '/../../data.js', 'const qians = ' + 
   JSON.stringify(qians, null, 2) + ';');
