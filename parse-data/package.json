@@ -12,12 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-html-parser": "^1.1.12",
-    "ts-node-dev": "^1.0.0-pre.32",
-    "typescript": "^3.3.3333"
+    "cheerio": "^1.0.0-rc.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/node": "^7.2.2"
+    "ts-node-dev": "^1.0.0-pre.32",
+    "typescript": "^3.3.3333",
+    "@types/cheerio": "^0.22.10"
   }
 }
