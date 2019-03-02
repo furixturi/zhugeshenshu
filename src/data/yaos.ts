@@ -52,5 +52,4 @@ for(let i = 7; i >= 4; i--) {
     }    
 }
 
-console.log(yaos)
 export { yaos };
