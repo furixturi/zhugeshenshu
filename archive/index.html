@@ -1,10 +1,3 @@
-<?php
-	$result = "";
-	if(isset($_POST["result"]) && isset($_POST["newGua"])){
-		$result = $_POST["result"];
-		$newGua = $_POST["newGua"];
-	}
-?>
 <!doctype html>
 <html lang="zh-CN">
 	<meta content="text/html; charset=utf8" http-equiv="Content-Type">
@@ -48,7 +41,6 @@
 			<input type="hidden" id="newGua" name="newGua" />
 			<input type="submit" value="submit"/>
 		</form>
-		<div id="explain"><?php echo '<a href="http://jrs.myweb.hinet.net/Y'.$newGua.'.htm" target="_blank">'.$result.'</a>'; ?></div>
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			(function($){
