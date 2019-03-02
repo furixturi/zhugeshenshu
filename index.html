@@ -1,49 +1,80 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-    <title>未来预知术</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="css/yin-yang.css" />
-    <link rel="stylesheet" href="css/styles.css" />
-</head>
-<body>
-<header><h1>未来预知术</h1></header>
-<div id="content container">
-    <div id="divination">
-    <div class="row">
-        <div class="gua col span8">
-            <button class="gua" value="1" disabled>乾</button>
-            <button class="gua" value="2" disabled>兑</button>
-            <button class="gua" value="3" disabled>离</button>
-            <button class="gua" value="4" disabled>震</button>
-            <button class="gua" value="5" disabled>巽</button>
-            <button class="gua" value="6" disabled>坎</button>
-            <button class="gua" value="7" disabled>艮</button>
-            <button class="gua" value="8" disabled>坤</button>
-            <div id="yin-yang"></div>
-        </div>
-        <div class="yao col span4">
-            <button class="yao" value="1" disabled>一</button>
-            <button class="yao" value="2" disabled>二</button>
-            <button class="yao" value="3" disabled>三</button>
-            <button class="yao" value="4" disabled>四</button>
-            <button class="yao" value="5" disabled>五</button>
-            <button class="yao" value="6" disabled>六</button>
-        </div>
-        </div>
-        <div class="ui container">
-            <button class="shuffel">默祷摇钱</button>
-            <button class="ask" disabled>问占</button>
-        </div>
-    </div>
-    <div id="explanation">
-
-    </div>
-</div>
-<footer>Developed by <a href="mailto:alabebop@gmail.com">Xiaoli Shen</a>.<br>
-    All rights reserved.</footer>
-<script src = "js/jquery.1.8.3.min.js"></script>
-<script src = "js/script.js"></script>
-</body>
+<!doctype html>
+<html lang="zh-CN">
+	<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+	<head>
+		<title>周易未来预知</title>
+		<style>
+			body {
+				width: 400px;
+				margin: 0px auto;				
+				text-align: center;
+				font-family: sans-serif;
+				font-size: 12px;
+			}
+			
+			h1 {
+				font-size: 16px;
+				height: 50px;
+				line-height: 60px;
+				display: inline-block;
+				font-weight: normal;
+				padding: 10px 0 0px 70px;
+				margin-left: -50px;
+				background: url("bagua1.gif") 0 10px no-repeat;
+			}
+			
+			#explain {
+				margin: 30px 0;
+				text-align: left;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>周易未来预知</h1>
+		<p>《周易测事》取自汉蜀诸葛武侯著，浙南刘伯温批的《未来预知术》<br/>
+  古人行事，践行为主，占卦辅之，以防不测，即谓之人算不如天算也。</p>
+		<form method="post">
+			<input type="button" id="btn1" value="1"/>
+			<input type="button" id="btn2" value="2"/>
+			<input type="button" id="btn3" value="3"/>
+			<input type="text" id="result" name="result" maxlength="3" />
+			<input type="hidden" id="newGua" name="newGua" />
+			<input type="submit" value="submit"/>
+		</form>
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript">
+			(function($){
+				var gua = ["乾", "兑", "离", "震", "巽", "坎", "艮", "坤"],
+					result = "",
+					sequenceAlert = "请按顺序 1，2，3 点按！";
+				$("#btn1, #btn2").click(function(){
+					$(this).attr("disabled", "disabled");
+					if($("#btn1").attr("disabled")){
+						var newGua = Math.floor(Math.random()*8);
+						$(this).data("gua", newGua+1);
+						result += gua[newGua];
+						$("#result").val(result);
+					}else{
+						alert(sequenceAlert);
+						$(this).removeAttr("disabled");
+					}
+				});
+				$("#btn3").click(function(){
+					$(this).attr("disabled", "disabled");
+					if($("#btn1").attr("disabled") && $("#btn2").attr("disabled")){
+						var newYao = Math.ceil(Math.random()*6);
+						$(this).data("yao", newYao);
+						result += newYao;
+						$("#result").val(result);
+						$("#newGua").val($("#btn1").data("gua"));
+					}else{
+						alert(sequenceAlert);
+						$(this).removeAttr("disabled");
+					}
+				});
+				$("input[type=submit]").click(function(){
+				});
+			})(jQuery);
+		</script>
+	</body>
 </html>
