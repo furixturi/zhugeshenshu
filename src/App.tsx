@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import bagua from './assets/bagua1.gif';
 import './App.scss';
 
-import { getResult, pullGua,  } from './utilities/pullGua';
-import { Qian } from './models';
+import { getResult, pullGua, pullShu } from './utilities';
+import { Qian } from '../models';
 
 interface OwnStates {
   gua1: string;
@@ -112,7 +112,7 @@ class App extends Component<{}, OwnStates> {
 
   private pullShu = () => {
     this.setState({
-      shu: (Math.floor(Math.random() * 6) + 1).toString()
+      shu: pullShu()
     });
   };
 

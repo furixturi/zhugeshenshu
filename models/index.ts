@@ -1,9 +1,9 @@
-interface SequenceItem {
+export interface SequenceItem {
   index: number;
   yao: string;
 }
 
-interface Qian {
+export interface Qian {
   explanation: string;
   index: number;
   indexText: string;
@@ -11,11 +11,9 @@ interface Qian {
   yao: string;
 }
 
-interface QianRaw {
+export interface QianRaw {
   indexText: string;
   index: number;
   qian?: string;
   explanation?: string;
 }
-
-export { SequenceItem , Qian, QianRaw }
