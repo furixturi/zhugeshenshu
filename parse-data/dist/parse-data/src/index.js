@@ -7,31 +7,35 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = __importStar(require("fs"));
-var bookData_1 = require("./bookData");
-var sequence_1 = require("./sequence");
-var bookData = bookData_1.parseBookData();
-var sequence = sequence_1.buildSequenceArray();
-var qianRaw;
-var sequenceItem;
-var qian;
-var qians = [];
-for (var i = 0; i < bookData.length; i++) {
+const fs = __importStar(require("fs"));
+const bookData_1 = require("./bookData");
+const sequence_1 = require("./sequence");
+const bookData = bookData_1.parseBookData();
+const sequence = sequence_1.buildSequenceArray();
+let qianRaw;
+let sequenceItem;
+const qians = [];
+const qianMap = {};
+for (let i = 0; i < bookData.length; i++) {
     qianRaw = bookData[i];
     sequenceItem = sequence[i];
-    var sequenceItemIndex = sequenceItem.index, yao = sequenceItem.yao;
-    var qianRawIndex = qianRaw.index, indexText = qianRaw.indexText, _a = qianRaw.qian, qian_1 = _a === void 0 ? '' : _a, _b = qianRaw.explanation, explanation = _b === void 0 ? '' : _b;
+    const { index: sequenceItemIndex, yao } = sequenceItem;
+    const { index: qianRawIndex, indexText, qian = '', explanation = '' } = qianRaw;
     if (qianRawIndex !== sequenceItemIndex) {
-        throw new Error("qianRaw index does not equal sequenceItem index!\n qianRaw: \"" + qianRawIndex + ": " + qianRaw.indexText + " " + qianRaw.qian + "\";\n sequenceItem: \"" + sequenceItemIndex + ": " + sequenceItem.yao);
+        throw new Error(`qianRaw index does not equal sequenceItem index!\n qianRaw: "${qianRawIndex}: ${qianRaw.indexText} ${qianRaw.qian}";\n sequenceItem: "${sequenceItemIndex}: ${sequenceItem.yao}`);
     }
-    var newQian = {
-        explanation: explanation,
+    const newQian = {
+        explanation,
         index: qianRawIndex,
-        indexText: indexText,
-        qian: qian_1,
-        yao: yao
+        indexText,
+        qian,
+        yao
     };
     qians.push(newQian);
+    qianMap[yao] = newQian;
 }
-fs.writeFileSync(__dirname + '/../../../src/data/data.ts', 'const qians = ' + JSON.stringify(qians, null, 2) + ';');
+fs.writeFileSync(__dirname + '/../../src/data/data.ts', `import { Qian, QianMap } from '../../models';
+  \nconst qians: Array<Qian> = ${JSON.stringify(qians, null, 2)};
+  \nconst qianMap: QianMap = ${JSON.stringify(qianMap, null, 2)};
+  \nexport { qians, qianMap };`);
 //# sourceMappingURL=index.js.map

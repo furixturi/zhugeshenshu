@@ -7,17 +7,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var cheerio = __importStar(require("cheerio"));
-var fs = __importStar(require("fs"));
-var parseBookData = function () {
-    var html = fs.readFileSync(__dirname + '/../data.html', 'utf8');
-    var $ = cheerio.load(html);
-    var started = false;
-    var counter = 0;
-    var qian;
-    var qians = [];
-    $('.al_txt p').each(function (i, elm) {
-        var text = $(elm).text();
+const cheerio = __importStar(require("cheerio"));
+const fs = __importStar(require("fs"));
+const parseBookData = () => {
+    const html = fs.readFileSync(__dirname + '/../data.html', 'utf8');
+    const $ = cheerio.load(html);
+    let started = false;
+    let counter = 0;
+    let qian;
+    const qians = [];
+    $('.al_txt p').each((i, elm) => {
+        const text = $(elm).text();
         if (text === '秘本诸葛神数384签签文') {
             started = true;
             return true;
