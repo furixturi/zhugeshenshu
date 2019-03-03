@@ -1,49 +1,67 @@
-import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 
-interface Qian {
-  indexText: string;
-  index: number;
-  qian?: string;
-  explanation?: string;
+import { parseBookData } from './bookData';
+import { buildSequenceArray } from './sequence';
+import {
+  Qian,
+  QianMap,
+  QianRaw,
+  SequenceItem
+} from '../../models';
+
+const bookData: Array<QianRaw> = parseBookData();
+const sequence: Array<SequenceItem> = buildSequenceArray();
+
+let qianRaw: QianRaw;
+let sequenceItem: SequenceItem;
+const qians: Array<Qian> = [];
+const qianMap: QianMap = {};
+
+for (let i = 0; i < bookData.length; i++) {
+  qianRaw = bookData[i];
+  sequenceItem = sequence[i];
+  const { index: sequenceItemIndex, yao } = sequenceItem;
+  const {
+    index: qianRawIndex,
+    indexText,
+    qian = '',
+    explanation = ''
+  } = qianRaw;
+
+  if (qianRawIndex !== sequenceItemIndex) {
+    throw new Error(
+      `qianRaw index does not equal sequenceItem index!\n qianRaw: "${qianRawIndex}: ${
+        qianRaw.indexText
+      } ${
+        qianRaw.qian
+      }";\n sequenceItem: "${sequenceItemIndex}: ${
+        sequenceItem.yao
+      }`
+    );
+  }
+
+  const newQian: Qian = {
+    explanation,
+    index: qianRawIndex,
+    indexText,
+    qian,
+    yao
+  };
+
+  qians.push(newQian);
+  qianMap[yao] = newQian;
 }
 
-const html:string = fs.readFileSync(__dirname + 
-  '/../data.html', 'utf8');
-
-const $: CheerioStatic = cheerio.load(html);
-
-let started = false;
-let counter = 0;
-let qian: Qian;
-const qians: Array<Qian> = [];
-
-$('.al_txt p').each((i, elm) => {
-  const text = $(elm).text();
-
-  if(text === '秘本诸葛神数384签签文') {
-    started = true;
-    return true;
-  }
-
-  if(started) {
-    if(text.indexOf('第') === 0) {
-      counter++;
-      qian = {
-        indexText: text,
-        index: counter
-      };
-      qians.push(qian);
-    } else if(text.indexOf('签诗') === 0) {
-      qian.qian = text;
-    } else if(text.indexOf('解签') === 0) {
-      qian.explanation = text;
-    } else {
-      qian.explanation += text;
-    }
-  }
-  
-});
-fs.writeFileSync(__dirname + 
-  '/../../data.js', 'const qians = ' + 
-  JSON.stringify(qians, null, 2) + ';');
+fs.writeFileSync(
+  __dirname + '/../../src/data/data.ts',
+  `import { Qian, QianMap } from '../../models';
+  \nconst qians: Array<Qian> = ${JSON.stringify(
+    qians,
+    null,
+    2
+  )};
+  \nconst qianMap: QianMap = ${JSON.stringify(
+    qianMap, null, 2
+  )};
+  \nexport { qians, qianMap };`
+);
