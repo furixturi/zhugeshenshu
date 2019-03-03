@@ -1,4 +1,4 @@
-import { qians } from '../data/data';
+import { qianMap } from '../data/data';
 import { Qian } from '../../models';
 
 const pullGua = (): string => {
@@ -20,7 +20,7 @@ const pullShu = (): string => {
 };
 
 const getResult = (yao: string): Qian => {
-  const qian = qians.find(qian => qian.yao === yao);
+  const qian: Qian = qianMap[yao];
   if (typeof qian === 'undefined') {
     throw new Error(
       `getResult > No Qian found for Yao: ${yao}`

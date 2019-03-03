@@ -17,3 +17,7 @@ export interface QianRaw {
   qian?: string;
   explanation?: string;
 }
+
+export interface QianMap {
+  [x: string]: Qian
+}
