@@ -33,9 +33,9 @@ const parseBookData = () : Array<QianRaw> => {
         };
         qians.push(qian);
       } else if (text.indexOf('签诗') === 0) {
-        qian.qian = text;
+        qian.qian = text.slice(3);
       } else if (text.indexOf('解签') === 0) {
-        qian.explanation = text;
+        qian.explanation = text.slice(3);
       } else {
         qian.explanation += text;
       }
