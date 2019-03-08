@@ -17,7 +17,7 @@ const parseBookData = () => {
     let qian;
     const qians = [];
     $('.al_txt p').each((i, elm) => {
-        const text = $(elm).text();
+        const text = $(elm).text().trim().replace(/\s\s+/g, ' ');
         if (text === '秘本诸葛神数384签签文') {
             started = true;
             return true;
@@ -32,10 +32,10 @@ const parseBookData = () => {
                 qians.push(qian);
             }
             else if (text.indexOf('签诗') === 0) {
-                qian.qian = text;
+                qian.qian = text.slice(3);
             }
             else if (text.indexOf('解签') === 0) {
-                qian.explanation = text;
+                qian.explanation = text.slice(3);
             }
             else {
                 qian.explanation += text;
