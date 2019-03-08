@@ -17,7 +17,7 @@ const parseBookData = () : Array<QianRaw> => {
   const qians: Array<QianRaw> = [];
 
   $('.al_txt p').each((i, elm) => {
-    const text = $(elm).text();
+    const text = $(elm).text().trim().replace(/\s\s+/g, ' ');
 
     if (text === '秘本诸葛神数384签签文') {
       started = true;
