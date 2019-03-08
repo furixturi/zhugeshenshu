@@ -9,9 +9,7 @@ interface OwnStates {
   gua1: string;
   gua2: string;
   shu: string;
-  yao: string;
-  qianText: string;
-  qianExplanation: string;
+  qian?: Qian;
 }
 class App extends Component<{}, OwnStates> {
   constructor(props: {}) {
@@ -19,10 +17,7 @@ class App extends Component<{}, OwnStates> {
     this.state = {
       gua1: '',
       gua2: '',
-      shu: '',
-      yao: '',
-      qianText: '',
-      qianExplanation: ''
+      shu: ''
     };
   }
 
@@ -86,11 +81,13 @@ class App extends Component<{}, OwnStates> {
             Submit
           </button>
         </section>
+        {this.state.qian &&
         <section className="result">
-          <h3>{this.state.yao}</h3>
-          <p>{this.state.qianText}</p>
-          <p>{this.state.qianExplanation}</p>
+          <h4 className="yao">{this.state.qian.indexText} {this.state.qian.yao}</h4>
+          <p className="qian">{this.state.qian.qian}</p>
+          <p className="explanation">{this.state.qian.explanation}</p>
         </section>
+        }
       </div>
     );
   }
@@ -98,9 +95,7 @@ class App extends Component<{}, OwnStates> {
   private pullGua1 = () => {
     this.setState({
       gua1: pullGua(),
-      yao: '',
-      qianText: '',
-      qianExplanation: ''
+      qian: undefined
     });
   };
 
@@ -124,9 +119,7 @@ class App extends Component<{}, OwnStates> {
       gua1: '',
       gua2: '',
       shu: '',
-      yao: this.state.gua1 + this.state.gua2 + this.state.shu,
-      qianText: qian.qian,
-      qianExplanation: qian.explanation
+      qian
     });
   };
 }
