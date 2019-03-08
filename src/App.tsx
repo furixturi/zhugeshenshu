@@ -83,9 +83,9 @@ class App extends Component<{}, OwnStates> {
         </section>
         {this.state.qian &&
         <section className="result">
-          <h3>{this.state.qian.indexText} {this.state.qian.yao}</h3>
-          <p>{this.state.qian.qian}</p>
-          <p>{this.state.qian.explanation}</p>
+          <h4 className="yao">{this.state.qian.indexText} {this.state.qian.yao}</h4>
+          <p className="qian">{this.state.qian.qian}</p>
+          <p className="explanation">{this.state.qian.explanation}</p>
         </section>
         }
       </div>
