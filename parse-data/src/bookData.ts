@@ -37,7 +37,13 @@ const parseBookData = () : Array<QianRaw> => {
       } else if (text.indexOf('解签') === 0) {
         qian.explanation = text.slice(3);
       } else {
-        qian.explanation += text;
+        let prev = $(elm).prev();
+        if(prev.text().indexOf('签诗') === 0) {
+          qian.qian += text;
+        }
+        if(prev.text().indexOf('解签') === 0) {
+          qian.explanation += text;
+        }
       }
     }
   });
