@@ -12,6 +12,7 @@ for (let i = 0; i < 384; i++) {
 
 const getMoreInfo = async (): Promise<Array<MoreInfo>> => {
   const startTime = new Date().getTime();
+  console.log('>> Start getMoreInfo asynchronously');
   try {
     const moreInfoArr: Array<MoreInfo> = [];
     const responses = await Promise.all(promises);
@@ -50,7 +51,6 @@ const getMoreInfo = async (): Promise<Array<MoreInfo>> => {
         };
         moreInfoArr.push(moreInfo);
       } else {
-        console.log("=== something's funny", status);
         throw new Error(
           'response not as expected\n' +
             JSON.stringify(response, undefined, 2)
@@ -59,15 +59,15 @@ const getMoreInfo = async (): Promise<Array<MoreInfo>> => {
     });
     const endTime = new Date().getTime();
     console.log(
-      `====== getMoreInfo SUCCEEDED after ${endTime -
-        startTime}ms ======`
+      `>> Finished getMoreInfo successfully after ${endTime -
+        startTime}ms`
     );
     return moreInfoArr;
   } catch (err) {
     const endTime = new Date().getTime();
     console.log(
-      `====== getMoreInfo FAILED after ${endTime -
-        startTime}ms ======\n`,
+      `>> Failed getMoreInfo after ${endTime -
+        startTime}ms\n`,
       err
     );
     return [];

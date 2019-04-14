@@ -21,17 +21,25 @@ const sequence_1 = require("./sequence");
 const getMoreInfo_1 = require("./getMoreInfo");
 function refreshDataSet() {
     return __awaiter(this, void 0, void 0, function* () {
-        const [qians, qianMap] = parseStaticData();
-        const moreInfoArr = yield getMoreInfo_1.getMoreInfo();
-        for (let i = 0; i < qians.length; i++) {
-            if (moreInfoArr[i] !== undefined) {
-                qians[i] = Object.assign({}, qians[i], { moreInfo: moreInfoArr[i] });
+        console.log('> Start refreshing dataset');
+        const startTime = new Date().getTime();
+        try {
+            const qianMap = parseStaticData();
+            const moreInfoArr = yield getMoreInfo_1.getMoreInfo();
+            for (let yao in qianMap) {
+                const qian = qianMap[yao];
+                qianMap[yao] = Object.assign({}, qian, { moreInfo: moreInfoArr[qian.index - 1] });
             }
-        }
-        fs.writeFileSync(__dirname + '/../../src/data/data.ts', `import { Qian, QianMap } from '../../models';
-    \nconst qians: Array<Qian> = ${JSON.stringify(qians, null, 2)};
+            fs.writeFileSync(__dirname + '/../../src/data/data.ts', `import { Qian, QianMap } from '../../models';
     \nconst qianMap: QianMap = ${JSON.stringify(qianMap, null, 2)};
-    \nexport { qians, qianMap };`);
+    \nexport { qianMap };`);
+            const endTime = new Date().getTime();
+            console.log(`> Dataset successfully refreshed after ${endTime -
+                startTime}ms`);
+        }
+        catch (err) {
+            console.log('> !!! Refreshing dataset failed!\n', err);
+        }
     });
 }
 function parseStaticData() {
@@ -39,7 +47,6 @@ function parseStaticData() {
     const sequence = sequence_1.buildSequenceArray();
     let qianRaw;
     let sequenceItem;
-    const qians = [];
     const qianMap = {};
     for (let i = 0; i < bookData.length; i++) {
         qianRaw = bookData[i];
@@ -56,10 +63,9 @@ function parseStaticData() {
             qian,
             yao
         };
-        qians.push(newQian);
         qianMap[yao] = newQian;
     }
-    return [qians, qianMap];
+    return qianMap;
 }
 refreshDataSet();
 //# sourceMappingURL=index.js.map
