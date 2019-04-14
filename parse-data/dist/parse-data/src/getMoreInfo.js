@@ -28,6 +28,7 @@ for (let i = 0; i < 384; i++) {
 }
 const getMoreInfo = () => __awaiter(this, void 0, void 0, function* () {
     const startTime = new Date().getTime();
+    console.log('>> Start getMoreInfo asynchronously');
     try {
         const moreInfoArr = [];
         const responses = yield Promise.all(promises);
@@ -60,20 +61,19 @@ const getMoreInfo = () => __awaiter(this, void 0, void 0, function* () {
                 moreInfoArr.push(moreInfo);
             }
             else {
-                console.log("=== something's funny", status);
                 throw new Error('response not as expected\n' +
                     JSON.stringify(response, undefined, 2));
             }
         });
         const endTime = new Date().getTime();
-        console.log(`====== getMoreInfo SUCCEEDED after ${endTime -
-            startTime}ms ======`);
+        console.log(`>> Finished getMoreInfo successfully after ${endTime -
+            startTime}ms`);
         return moreInfoArr;
     }
     catch (err) {
         const endTime = new Date().getTime();
-        console.log(`====== getMoreInfo FAILED after ${endTime -
-            startTime}ms ======\n`, err);
+        console.log(`>> Failed getMoreInfo after ${endTime -
+            startTime}ms\n`, err);
         return [];
     }
 });
