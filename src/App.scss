@@ -6,7 +6,7 @@ body {
 
 .App {
   max-width: 480px;
-  padding: 0 20px;
+  padding: 0 20px 100px 20px;
   h1,
   h2,
   h3,
@@ -39,16 +39,17 @@ body {
 }
 
 .intro {
-  text-align: center;
+  // text-align: center;
   p {
     margin: 0;
     text-indent: 0;
+    font-size: .9rem;
   }
 }
 
 .form {
   text-align: center;
-  margin: 15px;
+  margin: 15px 0;
   button {
     margin: 2px;
   }
