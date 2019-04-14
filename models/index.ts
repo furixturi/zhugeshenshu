@@ -3,12 +3,21 @@ export interface SequenceItem {
   yao: string;
 }
 
+export interface MoreInfo {
+  index: number;
+  indexText: string;
+  qian: string;
+  shortInfo: string;
+  longInfo: Array<string>;
+}
+
 export interface Qian {
   explanation: string;
   index: number;
   indexText: string;
   qian: string;
   yao: string;
+  moreInfo?: MoreInfo;
 }
 
 export interface QianRaw {
