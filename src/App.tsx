@@ -36,9 +36,7 @@ class App extends Component<{}, OwnStates> {
         </header>
         <section className="intro">
           <p>
-            《周易测事》取自汉蜀诸葛武侯著，浙南刘伯温批的《未来预知术》
-          </p>
-          <p>
+            《周易测事》取自汉蜀诸葛武侯著，浙南刘伯温批的《未来预知术》<br></br>
             古人行事，践行为主，占卦辅之，以防不测，即谓之人算不如天算也。
           </p>
         </section>
@@ -81,13 +79,33 @@ class App extends Component<{}, OwnStates> {
             Submit
           </button>
         </section>
-        {this.state.qian &&
-        <section className="result">
-          <h4 className="yao">{this.state.qian.indexText} {this.state.qian.yao}</h4>
-          <p className="qian">{this.state.qian.qian}</p>
-          <p className="explanation">{this.state.qian.explanation}</p>
-        </section>
-        }
+        {this.state.qian && (
+          <section className="result">
+            <h2 className="yao">
+              {this.state.qian.indexText}{' '}
+              {this.state.qian.yao}
+            </h2>
+            {this.state.qian.moreInfo && (
+              <h3 className="shortInfo">
+                {this.state.qian.moreInfo.shortInfo}
+              </h3>
+            )}
+            <p className="qian">{this.state.qian.qian}</p>
+            <p className="explanation">
+              {this.state.qian.explanation}
+            </p>
+            {this.state.qian.moreInfo &&
+              this.state.qian.moreInfo.longInfo && (
+                <div className="longInfo">
+                  {this.state.qian.moreInfo.longInfo.map(
+                    (infoParagraph, idx) => (
+                      <p key={idx}>{infoParagraph}</p>
+                    )
+                  )}
+                </div>
+              )}
+          </section>
+        )}
       </div>
     );
   }
