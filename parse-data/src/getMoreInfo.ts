@@ -1,46 +1,77 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-import { MoreInfo } from '../../models'
+import { MoreInfo } from '../../models';
 
 const urlBase = 'https://zhuge.911cha.com/';
 const promises: Array<Promise<any>> = [];
-for(let i = 0; i < 3; i++) {
-  const url = urlBase + (i+1) + '.html';
+for (let i = 0; i < 384; i++) {
+  const url = urlBase + (i + 1) + '.html';
   promises.push(axios.get(url));
 }
 
-const moreInfo: Array<MoreInfo> = [];
-
-const getMoreInfo = async (moreInfoArr: Array<MoreInfo>) => {
+const getMoreInfo = async (): Promise<Array<MoreInfo>> => {
+  const startTime = new Date().getTime();
   try {
+    const moreInfoArr: Array<MoreInfo> = [];
     const responses = await Promise.all(promises);
-    responses.map(response => {
+    responses.map((response, idx) => {
       const { status, data } = response;
-      if(status === 200) {
+      if (status === 200) {
         const $: CheerioStatic = cheerio.load(data, {
           normalizeWhitespace: true
         });
 
-        const sanitized:Array<string> = [];
+        const sanitized: Array<string> = [];
         $('div.mcon.f14.l200 p').each((i, el) => {
-          const text = $(el).text().replace(/(https:\/\/)?(zhuge|www)\.911cha\.com(\/)?|解签：/g, '').trim();
+          const text = $(el)
+            .text()
+            .replace(
+              /(https:\/\/)?(zhuge|www)\.911cha\.com(\/)?|解签：/g,
+              ''
+            )
+            .trim();
           sanitized.push(text);
         });
 
+        const index = idx + 1;
+        const indexText = $(
+          $('.mcon.f14.l200 > h2')[0]
+        ).text();
+        const qian = sanitized[1];
         const shortInfo = sanitized[0];
         const longInfo: Array<string> = sanitized.slice(2);
-        const moreInfo: MoreInfo = { shortInfo, longInfo };
+        const moreInfo: MoreInfo = {
+          index,
+          indexText,
+          qian,
+          shortInfo,
+          longInfo
+        };
         moreInfoArr.push(moreInfo);
-
-        console.log(moreInfoArr)
       } else {
-        console.log('=== something\'s funny', status)
+        console.log("=== something's funny", status);
+        throw new Error(
+          'response not as expected\n' +
+            JSON.stringify(response, undefined, 2)
+        );
       }
-    })
+    });
+    const endTime = new Date().getTime();
+    console.log(
+      `====== getMoreInfo SUCCEEDED after ${endTime -
+        startTime}ms ======`
+    );
+    return moreInfoArr;
   } catch (err) {
-    console.log('ERROR!', err)
+    const endTime = new Date().getTime();
+    console.log(
+      `====== getMoreInfo FAILED after ${endTime -
+        startTime}ms ======\n`,
+      err
+    );
+    return [];
   }
-}
+};
 
-getMoreInfo(moreInfo);
+export { getMoreInfo };

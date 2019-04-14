@@ -4,6 +4,9 @@ export interface SequenceItem {
 }
 
 export interface MoreInfo {
+  index: number;
+  indexText: string;
+  qian: string;
   shortInfo: string;
   longInfo: Array<string>;
 }
@@ -14,7 +17,7 @@ export interface Qian {
   indexText: string;
   qian: string;
   yao: string;
-  moreInfo: MoreInfo;
+  moreInfo?: MoreInfo;
 }
 
 export interface QianRaw {
