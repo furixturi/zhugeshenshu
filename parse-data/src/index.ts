@@ -13,32 +13,42 @@ import {
 } from '../../models';
 
 async function refreshDataSet() {
-  const [qians, qianMap] = parseStaticData();
-  const moreInfoArr: Array<MoreInfo> = await getMoreInfo();
+  console.log('> Start refreshing dataset');
+  const startTime = new Date().getTime();
+  try {
+    const qianMap = parseStaticData();
+    const moreInfoArr: Array<
+      MoreInfo
+    > = await getMoreInfo();
 
-  for (let i = 0; i < qians.length; i++) {
-    if (moreInfoArr[i] !== undefined) {
-      qians[i] = { ...qians[i], moreInfo: moreInfoArr[i] };
+    for (let yao in qianMap) {
+      const qian: Qian = qianMap[yao];
+      qianMap[yao] = {
+        ...qian,
+        moreInfo: moreInfoArr[qian.index - 1]
+      };
     }
-  }
-  fs.writeFileSync(
-    __dirname + '/../../src/data/data.ts',
-    `import { Qian, QianMap } from '../../models';
-    \nconst qians: Array<Qian> = ${JSON.stringify(
-      qians,
-      null,
-      2
-    )};
+    fs.writeFileSync(
+      __dirname + '/../../src/data/data.ts',
+      `import { Qian, QianMap } from '../../models';
     \nconst qianMap: QianMap = ${JSON.stringify(
       qianMap,
       null,
       2
     )};
-    \nexport { qians, qianMap };`
-  );
+    \nexport { qianMap };`
+    );
+    const endTime = new Date().getTime();
+    console.log(
+      `> Dataset successfully refreshed after ${endTime -
+        startTime}ms`
+    );
+  } catch (err) {
+    console.log('> !!! Refreshing dataset failed!\n', err);
+  }
 }
 
-function parseStaticData(): [Array<Qian>, any] {
+function parseStaticData(): QianMap {
   const bookData: Array<QianRaw> = parseBookData();
   const sequence: Array<
     SequenceItem
@@ -46,7 +56,6 @@ function parseStaticData(): [Array<Qian>, any] {
 
   let qianRaw: QianRaw;
   let sequenceItem: SequenceItem;
-  const qians: Array<Qian> = [];
   const qianMap: QianMap = {};
 
   for (let i = 0; i < bookData.length; i++) {
@@ -80,10 +89,9 @@ function parseStaticData(): [Array<Qian>, any] {
       yao
     };
 
-    qians.push(newQian);
     qianMap[yao] = newQian;
   }
-  return [qians, qianMap];
+  return qianMap;
 }
 
 refreshDataSet();
