@@ -29,4 +29,8 @@ const getResult = (yao: string): Qian => {
   return qian;
 };
 
-export { pullGua, pullShu, getResult };
+const getGua1 = (yao: string): string => yao[0];
+const getGua2 = (yao: string): string => yao[1];
+const getShu = (yao: string): string => yao[2];
+
+export { pullGua, pullShu, getResult, getGua1, getGua2, getShu };

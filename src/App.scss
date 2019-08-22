@@ -7,19 +7,19 @@ body {
 .App {
   max-width: 480px;
   padding: 0 20px 100px 20px;
-  h1,
-  h2,
-  h3,
-  h4,
-  h5 {
-    text-align: center;
-  }
-  p {
-    text-indent: 2em;
-    margin: .75em 0 0 0;
-  }
+  text-align: center;
+  margin: 0 auto;
+ 
+
 }
 
+p {
+  margin: .75em 0 0 0;
+}
+
+.longInfo {
+  text-align: left;
+}
 .App-logo {
   pointer-events: none;
 }
@@ -73,9 +73,22 @@ body {
 
 .explanation {
   color: blue;
-  text-align: left;
 }
 
 .yao {
   color: green;
 }
+
+.controls {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 30px auto;
+}
+
+.history {
+  display: flex;
+  justify-content: space-between;
+  max-width: 320px;
+  margin: 0 auto;
+}
+

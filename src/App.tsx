@@ -2,26 +2,43 @@ import React, { Component } from 'react';
 import bagua from './assets/bagua1.gif';
 import './App.scss';
 
-import { getResult, pullGua, pullShu } from './utilities';
+import {
+  getResult,
+  pullGua,
+  pullShu,
+  getGua1,
+  getGua2,
+  getShu
+} from './utilities';
 import { Qian } from '../models';
 
 interface OwnStates {
   gua1: string;
   gua2: string;
   shu: string;
-  qian?: Qian;
+  currentIndex: number;
+  history: Array<Qian>;
 }
 class App extends Component<{}, OwnStates> {
   constructor(props: {}) {
     super(props);
+
     this.state = {
       gua1: '',
       gua2: '',
-      shu: ''
+      shu: '',
+      currentIndex: -1,
+      history: []
     };
   }
 
   render() {
+    const currentIndex = this.state.currentIndex;
+    const history = this.state.history;
+    const before = history.slice(0, currentIndex);
+    const after = history.slice(currentIndex + 1);
+    const qian = history[currentIndex];
+
     return (
       <div className="App">
         <header className="App-header">
@@ -79,25 +96,19 @@ class App extends Component<{}, OwnStates> {
             Submit
           </button>
         </section>
-        {this.state.qian && (
+        {qian && (
           <section className="result">
-            <h2 className="yao">
-              {this.state.qian.indexText}{' '}
-              {this.state.qian.yao}
-            </h2>
-            {this.state.qian.moreInfo && (
-              <h3 className="shortInfo">
-                {this.state.qian.moreInfo.shortInfo}
-              </h3>
-            )}
-            <p className="qian">{this.state.qian.qian}</p>
+            <h4 className="yao">
+              {qian.indexText} {qian.yao}
+            </h4>
+            <p className="qian">{qian.qian}</p>
             <p className="explanation">
-              {this.state.qian.explanation}
+              {qian.explanation}
             </p>
-            {this.state.qian.moreInfo &&
-              this.state.qian.moreInfo.longInfo && (
+            {qian.moreInfo &&
+              qian.moreInfo.longInfo && (
                 <div className="longInfo">
-                  {this.state.qian.moreInfo.longInfo.map(
+                  {qian.moreInfo.longInfo.map(
                     (infoParagraph, idx) => (
                       <p key={idx}>{infoParagraph}</p>
                     )
@@ -106,39 +117,102 @@ class App extends Component<{}, OwnStates> {
               )}
           </section>
         )}
+        <section className="controls">
+          <button
+            onClick={() => {
+              this.goToHistory(currentIndex - 1);
+            }}
+            disabled={currentIndex <= 0}
+          >
+            Back
+          </button>
+          <button
+            onClick={() => {
+              this.goToHistory(currentIndex + 1);
+            }}
+            disabled={currentIndex == history.length - 1}
+          >
+            Forward
+          </button>
+        </section>
+        <section className="history">
+          <div>
+            {before.map((qian: Qian, i) => (
+                <div
+                  key={i}
+                  onClick={() => {
+                    this.goToHistory(i);
+                  }}
+                >
+                  {qian.indexText} {qian.yao}
+                </div>
+              ))
+              .reverse()}
+          </div>
+          <div>
+            {after.map((qian: Qian, i) => (
+              <div
+                key={i}
+                onClick={() => {
+                  this.goToHistory(before.length + 1 + i);
+                }}
+              >
+                {qian.indexText} {qian.yao}
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     );
   }
 
   private pullGua1 = () => {
+    this.goToHistory(this.state.history.length-1);
     this.setState({
-      gua1: pullGua(),
-      qian: undefined
+      gua1: pullGua()
     });
   };
 
   private pullGua2 = () => {
+    this.goToHistory(this.state.history.length-1);
     this.setState({
       gua2: pullGua()
     });
   };
 
   private pullShu = () => {
+    this.goToHistory(this.state.history.length-1);
     this.setState({
       shu: pullShu()
     });
   };
 
   private submit = () => {
+    this.goToHistory(this.state.history.length-1);
     const qian: Qian = getResult(
       this.state.gua1 + this.state.gua2 + this.state.shu
     );
+    const history: Array<Qian> = this.state.history.concat([qian]);
+    const currentIndex = history.length - 1;
+
     this.setState({
       gua1: '',
       gua2: '',
       shu: '',
-      qian
+      currentIndex,
+      history
     });
+  };
+
+  private goToHistory = (index: number) => {
+    if (
+      index >= 0 &&
+      index < this.state.history.length
+    ) {
+      this.setState({
+        currentIndex: index
+      });
+    }
   };
 }
 
