@@ -127,6 +127,11 @@ class App extends Component<{}, OwnStates> {
             Back
           </button>
           <button
+            onClick={this.clearHistory}
+            disabled={history.length < 2}>
+            Clear  
+          </button>
+          <button
             onClick={() => {
               this.goToHistory(currentIndex + 1);
             }}
@@ -213,6 +218,13 @@ class App extends Component<{}, OwnStates> {
         currentIndex: index
       });
     }
+  };
+
+  private clearHistory = () => {
+    this.setState({
+      currentIndex: -1,
+      history: []
+    });
   };
 }
 
